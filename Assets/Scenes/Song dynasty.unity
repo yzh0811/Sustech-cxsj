@@ -5804,6 +5804,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InputField (TMP)
       objectReference: {fileID: 0}
+    - target: {fileID: 8531177638306982956, guid: ed5a849a9d7b73244a5c704dfae22629, type: 3}
+      propertyPath: m_GlobalFontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 99a809b14eda1eb4ba150862f72381cc, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
