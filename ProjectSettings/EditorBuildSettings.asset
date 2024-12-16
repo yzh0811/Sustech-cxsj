@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/beginning.unity
+    guid: 24c65dbe4b2f6834fbd503c1710438d3
+  - enabled: 1
+    path: Assets/Scenes/Level_1.unity
+    guid: 0fe59771e53e108489aa053ab5b3ac32
+  - enabled: 1
+    path: Assets/Scenes/Level_2.unity
+    guid: d9c866ac249ea2a4897c7bd6e8307dd9
+  - enabled: 1
+    path: Assets/Scenes/Song dynasty.unity
+    guid: 134f6b63a30e14453aca3ceed2817bbb
+  - enabled: 1
+    path: Assets/Scenes/Tang dynasty.unity
+    guid: cc1d432cffd824c12a1ae07313b2dd9a
+  - enabled: 1
+    path: Assets/Scenes/Level_Generation.unity
+    guid: 4ec7e57cc43058f46ba8f2020fd0cea2
+  m_configObjects: {}

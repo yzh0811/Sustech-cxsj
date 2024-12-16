@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3637804821731765051
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8321000689238800596}
+  - component: {fileID: 239970049439950751}
+  m_Layer: 0
+  m_Name: TestTimeLine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8321000689238800596
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3637804821731765051}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9, y: 44, z: -8.718346}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!320 &239970049439950751
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3637804821731765051}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 9b247fda530a53742843a62e30e40fc3, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 4167083162791148614, guid: 9b247fda530a53742843a62e30e40fc3, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 8265626043751544945, guid: 9b247fda530a53742843a62e30e40fc3, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3224033762060724122, guid: 9b247fda530a53742843a62e30e40fc3, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 4299083782604735532, guid: 9b247fda530a53742843a62e30e40fc3, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 4685128944946896823, guid: 9b247fda530a53742843a62e30e40fc3, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References:
+    - 3c226845b50de1e42b302c18834965c2: {fileID: 0}
+    - 41a388b2451209d49aa536880ac5da5e: {fileID: 0}
+    - 81b504ca88af6eb40b3f178eed618721: {fileID: 0}
