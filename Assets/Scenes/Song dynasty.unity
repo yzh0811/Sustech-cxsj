@@ -1298,6 +1298,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC2
       objectReference: {fileID: 0}
+    - target: {fileID: 6195217376991974960, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
+      propertyPath: userInputField
+      value: 
+      objectReference: {fileID: 1399262234}
     - target: {fileID: 6270204986819300064, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: userInputField
       value: 
@@ -1342,7 +1346,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6270204986819300064, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

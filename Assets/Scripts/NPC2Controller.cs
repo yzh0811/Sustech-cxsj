@@ -6,8 +6,12 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using TMPro;
+using TMPro.Examples;
 public class NPC2 : MonoBehaviour
 {
+    private bool isCollisionHandled = false;
+    private bool isInDialogue = false; // 添加标志位
+    private bool isProcessingState = false;
     //ai部分
     private string apiKey = "deb0870790e59c7f8d4593e5459b5b59.dn2EGqYLtrmEmhkt";
     //对话框部分
@@ -24,7 +28,7 @@ public class NPC2 : MonoBehaviour
     public Animator animator;
     //向量
     public Vector2 vector2;
-    //状态 0 正常行走 1 发生碰撞 2 碰撞到主角 3 对话 4 送礼 5 组队
+    //状态 0 正常行走 1 发生碰撞 2 碰撞到主角 3 对话 4 送礼 5 组队 6 npc碰撞
     public int npcState = 0;
     //多长时间变换npc的移动方向
     public float changeDirectionTime = 0;
@@ -61,6 +65,14 @@ public class NPC2 : MonoBehaviour
     //碰撞玩家的时间
     public float touchPlayerTime = 0;
     //-------碰撞玩家
+
+    //-------碰撞npc
+    //碰撞npc的flag
+    public bool touchNpc = false;
+    //碰撞npc的时间
+    public float touchNpcTime = 0;
+    //-------碰撞npc
+
 
     //-------对话 
     public bool firstTalk = true;
@@ -110,6 +122,10 @@ public class NPC2 : MonoBehaviour
             userInputField.gameObject.SetActive(!isInputFieldActive);
             isInputFieldActive = !isInputFieldActive;
         }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            isCollisionHandled = false;
+        }
         if (Input.GetKeyDown(KeyCode.G))
         {
             if (InputHandler.isGeneratingGraph)
@@ -133,16 +149,25 @@ public class NPC2 : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isCollisionHandled) return; // 如果碰撞已经处理过，直接返回
+
         if (collision.gameObject.tag == "Player")
         {
             npcState = 2;
             rigidbody.bodyType = RigidbodyType2D.Static;
             touchPlayer = true;
         }
+        else if (collision.gameObject.CompareTag("NPC"))
+        {
+            touchWithNpc(collision.gameObject);
+            npcState = 6;
+        }
         else
         {
             npcState = 1;
         }
+
+        isCollisionHandled = true; // 标记碰撞已处理
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
@@ -151,6 +176,10 @@ public class NPC2 : MonoBehaviour
             npcState = 2;
             rigidbody.bodyType = RigidbodyType2D.Static;
 
+        }else if(collision.gameObject.tag == "NPC")
+        {
+            rigidbody.bodyType = RigidbodyType2D.Static;
+            npcState = 6;
         }
         else
         {
@@ -160,20 +189,26 @@ public class NPC2 : MonoBehaviour
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
+        if (isProcessingState)
+        {
+            return;
+        }
         npcState = 0;
         stayingTime = 0;
         touchStayTime = 0;
         touchNormalTime = 0;
-
-        //碰撞玩家
+        //碰撞玩家和npc
         rigidbody.bodyType = RigidbodyType2D.Dynamic;
         touchPlayerTime = 0;
+        touchNpcTime = 0;
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
         touchPlayer = false;
     }
     //npc控制器
     public void NpcController()
     {
+        if (isProcessingState) return;
+
         switch (npcState)
         {
             case 0:
@@ -185,12 +220,7 @@ public class NPC2 : MonoBehaviour
             case 2:
                 touchWithPlayer();
                 break;
-            case 3:
-                //不需要任何操作
-                break;
-            case 4:
-                break;
-            case 5:
+            case 6:
                 break;
         }
     }
@@ -408,6 +438,7 @@ public class NPC2 : MonoBehaviour
                         y = 1;
                         changDirectionIndex = 0;
                         break;
+                 
                 }
                 touchStayTime = 0;
             }
@@ -436,6 +467,58 @@ public class NPC2 : MonoBehaviour
                 gameObject.transform.GetChild(0).gameObject.SetActive(true);
             }
         }
+    }
+    public void touchWithNpc(GameObject otherNpc)
+    {
+        isProcessingState = true;
+        if (touchNpc) return;
+        touchNpc = true;
+        if (isInDialogue) return; // 防止重复触发对话
+        isInDialogue = true;
+        // 停止两者的随机移动
+        this.rigidbody.bodyType = RigidbodyType2D.Static;
+        otherNpc.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        Debug.Log("npc相互触碰");
+        // 开始对话协程
+        StartCoroutine(StartDialogueWithAI(otherNpc));
+    }
+   
+    private IEnumerator StartDialogueWithAI(GameObject otherNpc)
+    {
+        // 获取两位 NPC 的 AI 数据
+        NPC thisNpcAI = GetComponent<NpcComponent>().npcData;
+        NPC otherNpcAI = otherNpc.GetComponent<NpcComponent>().npcData;
+
+        int dialogueRounds = Random.Range(2, 5); // 对话轮数
+        for (int i = 0; i < dialogueRounds; i++)
+        {
+            // 当前 NPC 说话
+            string thisDialogue = thisNpcAI.GenerateDialogue();
+            if(thisDialogue != null)
+            {
+                Debug.Log("对话内容不为空");
+            }
+            thisNpcAI.DialogueHistory.Add(thisDialogue);
+            GetComponent<DialogueComponent>().ShowDialogue(thisDialogue);
+            yield return new WaitForSeconds(2);
+
+            // 另一个 NPC 回应
+            string otherDialogue = otherNpcAI.GenerateDialogue(thisDialogue);
+            otherNpcAI.DialogueHistory.Add(otherDialogue);
+            otherNpc.GetComponent<DialogueComponent>().ShowDialogue(otherDialogue);
+            yield return new WaitForSeconds(2);
+        }
+
+        // 对话结束，清除文本
+        GetComponent<DialogueComponent>().HideDialogue();
+        otherNpc.GetComponent<DialogueComponent>().HideDialogue();
+        Debug.Log("对话结束");
+        // 恢复随机移动
+        rigidbody.bodyType = RigidbodyType2D.Dynamic;
+        otherNpc.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        isProcessingState = false;
+        isInDialogue = false;
+        touchNpc = false;
     }
 
     //对话
