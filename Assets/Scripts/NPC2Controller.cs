@@ -76,7 +76,8 @@ public class NPC2 : MonoBehaviour
 
     //-------对话 
     public bool firstTalk = true;
-    public string npcName = "李白";
+    public string npcName;
+    public string dynasty;
     //当前好感度
     public int npcFavorLevel = 0;
     //最大好感度
@@ -493,7 +494,7 @@ public class NPC2 : MonoBehaviour
         for (int i = 0; i < dialogueRounds; i++)
         {
             // 当前 NPC 说话
-            string thisDialogue = thisNpcAI.GenerateDialogue();
+            string thisDialogue = thisNpcAI.GenerateDialogue(otherNpcAI.Name);
             if(thisDialogue != null)
             {
                 Debug.Log("对话内容不为空");
@@ -503,7 +504,7 @@ public class NPC2 : MonoBehaviour
             yield return new WaitForSeconds(2);
 
             // 另一个 NPC 回应
-            string otherDialogue = otherNpcAI.GenerateDialogue(thisDialogue);
+            string otherDialogue = otherNpcAI.GenerateDialogue(thisNpcAI.Name, thisDialogue);
             otherNpcAI.DialogueHistory.Add(otherDialogue);
             otherNpc.GetComponent<DialogueComponent>().ShowDialogue(otherDialogue);
             yield return new WaitForSeconds(2);

@@ -418,7 +418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1939579832280120393, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_Name
-      value: NPC2 (1)
+      value: "NPC_\u82CF\u8F7C"
       objectReference: {fileID: 0}
     - target: {fileID: 1939579832280120393, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_TagString
@@ -493,6 +493,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6195217376991974960, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
+      propertyPath: dynasty
+      value: "\u5B8B\u671D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195217376991974960, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
+      propertyPath: npcName
+      value: "\u82CF\u8F7C"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195217376991974960, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
+      propertyPath: firstTalk
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195217376991974960, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: userInputField
       value: 
       objectReference: {fileID: 1837840616}
@@ -538,7 +550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8651984786879485148, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.18
+      value: -0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8651984786879485148, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -604,6 +616,7 @@ MonoBehaviour:
     Personality: "\u5FE7\u56FD\u5FE7\u6C11"
     Interests: []
     DialogueHistory: []
+    lastSentence: 
 --- !u!1001 &428132801
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -846,6 +859,7 @@ MonoBehaviour:
     Personality: "\u6D6A\u6F2B"
     Interests: []
     DialogueHistory: []
+    lastSentence: 
 --- !u!1001 &614458998
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25720,7 +25734,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1939579832280120393, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_Name
-      value: NPC2
+      value: "NPC_\u674E\u767D"
       objectReference: {fileID: 0}
     - target: {fileID: 1939579832280120393, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_TagString
@@ -25795,6 +25809,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6195217376991974960, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
+      propertyPath: dynasty
+      value: "\u5510\u671D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195217376991974960, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: userInputField
       value: 
       objectReference: {fileID: 1837840616}
@@ -25840,11 +25858,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8651984786879485148, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -5.4
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8651984786879485148, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.29
+      value: -5.4
       objectReference: {fileID: 0}
     - target: {fileID: 8651984786879485148, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

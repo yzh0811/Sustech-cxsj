@@ -10,9 +10,10 @@ public class NpcComponent : MonoBehaviour
     {
         // 初始化 NPC 数据
         npcData = new NPC(
-            name: "NPC_" + Random.Range(1, 100),
-            personality: Random.value > 0.5f ? "友好" : "谨慎",
-            interests: new List<string> { "钓鱼", "种田", "冒险" }
+            name: npcData.Name,
+            personality: npcData.Personality,
+            interests: name == "李白" ? new List<string> { "饮酒", "游历山水", "作诗" } : 
+            new List<string> {"抚琴", "书法" , "美食"}
         );
     }
 }

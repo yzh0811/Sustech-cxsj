@@ -77,11 +77,11 @@ public class InputHandler : MonoBehaviour
             {
                 messages = new[]
                 {
-                    new { role = "user", content = "你现在是" + NPCRole },
-                    new { role = "assistant", content = "当然。" },
                     new { role = "user", content = userMessage },
-                }
-            };
+                },
+                system = "你在和玩家对话。你现在是AI模拟" + NPCRole + 
+                ", 请按照史实和系统记忆将自己当作他，模拟他的行为。",
+            };  
 
             string jsonData = JsonConvert.SerializeObject(requestBody);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
