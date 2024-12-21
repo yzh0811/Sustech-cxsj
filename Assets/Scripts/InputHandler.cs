@@ -10,6 +10,13 @@ using System;
 using UnityEngine.SceneManagement;
 using System.IO;
 using UnityEngine.UI;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
+using System.Net.Sockets;
+using System.Net;
+using System.Collections;
+using UnityEngine.Networking;
+using System.Text.RegularExpressions;
 public class InputHandler : MonoBehaviour
 {
     public TMP_InputField inputField;
@@ -21,6 +28,9 @@ public class InputHandler : MonoBehaviour
     private string apiUrl = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/ernie-4.0-turbo-128k?access_token=24.0b8b17ad51d7a8c5e8c04417c2bcf5c6.2592000.1736602936.282335-116499673";
     private string graphUrl = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/text2image/sd_xl?access_token=24.db73b730d2bbe318a9c5a42c48a7f2f6.2592000.1736338739.282335-116499673";
     private string poem = "";
+    private string flaskUrl = "http://localhost:5000/api/memory";
+    private string previousMemory = "";
+
     // Start is called before the first frame update  
     void Start()
     {
@@ -30,6 +40,7 @@ public class InputHandler : MonoBehaviour
             NPCRole = GetNPCRoleForCurrentScene();
         }
         inputField.onEndEdit.AddListener(OnInputFieldSubmit);
+        
     }
 
     private void OnInputFieldSubmit(string input)
@@ -38,6 +49,7 @@ public class InputHandler : MonoBehaviour
         if (!isGeneratingGraph)
         {
             SendRequestToAI(input);
+          
         }
         else
         {
@@ -45,6 +57,8 @@ public class InputHandler : MonoBehaviour
         }
         inputField.text = ""; // 清空输入框  
     }
+
+ 
     private string GetNPCRoleForCurrentScene()
     {
         // 根据当前场景名称返回 NPC 身份
@@ -71,6 +85,8 @@ public class InputHandler : MonoBehaviour
             Instantiate(dialogPrefab);
         }
         GameObject InitDialog = GameObject.FindGameObjectWithTag("DialogPrefab");
+        var systemMemoryId = NPCRole == "唐代诗人李白" ? "sm-pmt3q5ia1whqybdb" :
+                "sm-2j77vi5yh3rjqkkb";
         using (HttpClient client = new HttpClient())
         {
             var requestBody = new
@@ -79,8 +95,12 @@ public class InputHandler : MonoBehaviour
                 {
                     new { role = "user", content = userMessage },
                 },
-                system = "你在和玩家对话。你现在是AI模拟" + NPCRole + 
+                system = "你在和玩家对话。你现在是AI模拟" + NPCRole +
                 ", 请按照史实和系统记忆将自己当作他，模拟他的行为。",
+                enable_system_memory = true,
+                system_memory_id = NPCRole == "唐代诗人李白" ? "sm-pmt3q5ia1whqybdb" :
+                "sm-2j77vi5yh3rjqkkb",
+               
             };  
 
             string jsonData = JsonConvert.SerializeObject(requestBody);
@@ -103,6 +123,8 @@ public class InputHandler : MonoBehaviour
                         dialog.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                         dialog.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
                         InitDialog.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = aiResponse.result;
+                        //更新记忆
+                        StartUpdatingMemory(userMessage, aiResponse.result, systemMemoryId);
                     }
                     else
                     {
@@ -119,7 +141,84 @@ public class InputHandler : MonoBehaviour
                 Debug.LogError($"请求异常: {e.Message}");
             }
         }
+    } 
+    public void StartUpdatingMemory(string userMessage, string aiResponse, string systemMemoryId)
+    {
+       
+        StartCoroutine(UpdateMemory(userMessage, aiResponse, systemMemoryId));
     }
+
+    public IEnumerator UpdateMemory(string userMessage, string aiResponse, string systemMemoryId)
+    {
+        // 获取内存信息  
+        yield return StartCoroutine(GetMemoryInfo()); // 等待 GetMemoryInfo 完成  
+        Debug.Log("传入参数：" + userMessage + aiResponse + systemMemoryId + previousMemory);
+        StartCoroutine(SendUpdateInfo(userMessage, aiResponse, systemMemoryId, previousMemory));
+    }
+
+    private IEnumerator SendUpdateInfo(string userMessage, string aiResponse, string systemMemoryId, string previousMemory)
+    {
+        MemoryUpdate memoryUpdate = new MemoryUpdate
+        {
+            user = userMessage,
+            ai = aiResponse,
+            memoryId = systemMemoryId,
+            memoryContent = previousMemory
+        };
+
+        // 将对象转换为 JSON  
+        var json = JsonUtility.ToJson(memoryUpdate);
+
+        Debug.Log("生成的 JSON: " + json); // 打印生成的 JSON 以进行调试  
+
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Put(flaskUrl, json))
+        {
+            // 设置请求头为 JSON  
+            webRequest.SetRequestHeader("Content-Type", "application/json");
+
+            // 发送请求并等待响应  
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error: " + webRequest.error);
+            }
+            else
+            {
+                Debug.Log("Memory updated successfully: " + webRequest.downloadHandler.text);
+            }
+        }
+    }
+
+    private IEnumerator GetMemoryInfo()
+    {
+        var getFlaskUrl = flaskUrl + (NPCRole == "唐代诗人李白" ? "/LB" :
+                "/SS");
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(flaskUrl))
+        {
+            // Send the request and wait for a response  
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error: " + webRequest.error);
+            }
+            else
+            {
+                // Handle the response  
+                string jsonResponse = webRequest.downloadHandler.text;
+                string decodedResponse = Regex.Unescape(jsonResponse);
+                Debug.Log(decodedResponse);
+                previousMemory = decodedResponse;
+                Debug.Log(previousMemory);
+            }
+        }
+    }
+
+   
+
+
 
     private async void GenerateGraph(string userMessage)
     {
@@ -279,4 +378,15 @@ public class InputHandler : MonoBehaviour
 
         Debug.Log($"图像已保存到: {savedImagePath}");
     }
+
+    [System.Serializable]
+    public class MemoryUpdate
+    {
+        public string user;
+        public string ai;
+        public string memoryId;
+        public string memoryContent;
+    }
+
 }
+
