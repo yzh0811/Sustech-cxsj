@@ -230,7 +230,7 @@ ScriptedImporter:
     layerType: 0
     blendMode: 0
     cells:
-    - name: brazier-small_Frame_0
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -239,7 +239,7 @@ ScriptedImporter:
         width: 14
         height: 20
       spriteId: b3c74a069f2419c4181357723bcb7f8d
-    - name: brazier-small_Frame_1
+    - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
@@ -248,7 +248,7 @@ ScriptedImporter:
         width: 14
         height: 20
       spriteId: 505e79caebf35bf49b1a31e3087cecf2
-    - name: brazier-small_Frame_2
+    - name: Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
@@ -257,7 +257,7 @@ ScriptedImporter:
         width: 14
         height: 23
       spriteId: c87a70799ed1f9c4fbd6aed725a29168
-    - name: brazier-small_Frame_3
+    - name: Frame_3
       frameIndex: 3
       additiveSortOrder: 0
       cellRect:
@@ -266,7 +266,7 @@ ScriptedImporter:
         width: 14
         height: 24
       spriteId: a4d9c8199b8996d4fa21a073666357b5
-    - name: brazier-small_Frame_4
+    - name: Frame_4
       frameIndex: 4
       additiveSortOrder: 0
       cellRect:
