@@ -1,11 +1,24 @@
 using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Networking;
+using TMPro;
+using static System.Net.WebRequestMethods;
+using System;
+using UnityEngine.SceneManagement;
+using System.IO;
+using UnityEngine.UI;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
+using System.Net.Sockets;
+using System.Net;
 
 [System.Serializable]
-public class NPC
+public class NPC : MonoBehaviour
 {
     public string Name;
     public string Personality; // 性格，比如：友好、谨慎、冷漠
@@ -13,7 +26,8 @@ public class NPC
     public List<string> DialogueHistory; // 对话历史
     public string lastSentence;
     private string apiUrl = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/ernie-4.0-turbo-128k?access_token=24.0b8b17ad51d7a8c5e8c04417c2bcf5c6.2592000.1736602936.282335-116499673";
-
+    private string flaskUrl = "http://localhost:5000/api/memory";
+    private string previousMemory = "";
     public NPC(string name, string personality, List<string> interests)
     {
         Name = name;
@@ -28,7 +42,7 @@ public class NPC
         if (input == null)
         {
             // 随机生成话题
-            string topic = Interests[Random.Range(0, Interests.Count)];
+            string topic = Interests[UnityEngine.Random.Range(0, Interests.Count)];
             invokeAIDialog(topic, Name, otherName);
             return lastSentence;
         }
@@ -53,6 +67,9 @@ public class NPC
                 },
                 system = "你在和" + OtherNPCRole + "对话。你现在是AI模拟" + NPCRole +
                 ", 请按照史实和系统记忆将自己当作他，模拟他的行为。",
+                enable_system_memory = true,
+                system_memory_id = NPCRole == "李白" ? "sm-nxdgvcs8fpn4ncmy" :
+                "sm-mzw1xv7r6eh3wtej",
             };
 
             string jsonData = JsonConvert.SerializeObject(requestBody);
@@ -103,6 +120,9 @@ public class NPC
                 },
                 system = "你在和" + OtherNPCRole + "对话。你现在是AI模拟" + NPCRole + 
                 ", 请按照史实和系统记忆将自己当作他，模拟他的行为。",
+                enable_system_memory = true,
+                system_memory_id = NPCRole == "李白" ? "sm-nxdgvcs8fpn4ncmy" :
+                "sm-mzw1xv7r6eh3wtej",
             };
 
             string jsonData = JsonConvert.SerializeObject(requestBody);
@@ -144,5 +164,88 @@ public class NPC
     private class AIResponse
     {
         public string result; // 仅保持 result 字段  
+    }
+
+    [System.Serializable]
+    public class MemoryUpdate
+    {
+        public string user;
+        public string ai;
+        public string memoryId;
+        public string memoryContent;
+    }
+
+    public void StartUpdatingMemory(string userMessage, string aiResponse, string systemMemoryId)
+    {
+
+        StartCoroutine(UpdateMemory(userMessage, aiResponse, systemMemoryId));
+    }
+
+    public IEnumerator UpdateMemory(string userMessage, string aiResponse, string systemMemoryId)
+    {
+        // 获取内存信息  
+        yield return StartCoroutine(GetMemoryInfo()); // 等待 GetMemoryInfo 完成  
+        Debug.Log("传入参数：" + userMessage + aiResponse + systemMemoryId + previousMemory);
+        StartCoroutine(SendUpdateInfo(userMessage, aiResponse, systemMemoryId, previousMemory));
+    }
+
+    private IEnumerator SendUpdateInfo(string userMessage, string aiResponse, string systemMemoryId, string previousMemory)
+    {
+        MemoryUpdate memoryUpdate = new MemoryUpdate
+        {
+            user = userMessage,
+            ai = aiResponse,
+            memoryId = systemMemoryId,
+            memoryContent = previousMemory
+        };
+
+        // 将对象转换为 JSON  
+        var json = JsonUtility.ToJson(memoryUpdate);
+
+        Debug.Log("生成的 JSON: " + json); // 打印生成的 JSON 以进行调试  
+
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Put(flaskUrl, json))
+        {
+            // 设置请求头为 JSON  
+            webRequest.SetRequestHeader("Content-Type", "application/json");
+
+            // 发送请求并等待响应  
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error: " + webRequest.error);
+            }
+            else
+            {
+                Debug.Log("Memory updated successfully: " + webRequest.downloadHandler.text);
+            }
+        }
+    }
+
+    private IEnumerator GetMemoryInfo()
+    {
+        var getFlaskUrl = flaskUrl + (Name == "李白" ? "/LB-NPC" :
+                "/SS-NPC");
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(flaskUrl))
+        {
+            // Send the request and wait for a response  
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error: " + webRequest.error);
+            }
+            else
+            {
+                // Handle the response  
+                string jsonResponse = webRequest.downloadHandler.text;
+                string decodedResponse = Regex.Unescape(jsonResponse);
+                Debug.Log(decodedResponse);
+                previousMemory = decodedResponse;
+                Debug.Log(previousMemory);
+            }
+        }
     }
 }

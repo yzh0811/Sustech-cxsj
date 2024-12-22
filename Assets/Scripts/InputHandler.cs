@@ -96,7 +96,7 @@ public class InputHandler : MonoBehaviour
                     new { role = "user", content = userMessage },
                 },
                 system = "你在和玩家对话。你现在是AI模拟" + NPCRole +
-                ", 请按照史实和系统记忆将自己当作他，模拟他的行为。",
+                ", 请按照史实和系统记忆将自己当作他，模拟他的行为。并且注意从记忆中获取情感数值，以作出不同的行为。",
                 enable_system_memory = true,
                 system_memory_id = NPCRole == "唐代诗人李白" ? "sm-pmt3q5ia1whqybdb" :
                 "sm-2j77vi5yh3rjqkkb",
