@@ -458,6 +458,7 @@ MonoBehaviour:
   touchNpcTime: 0
   firstTalk: 1
   npcName: "\u674E\u767D"
+  dynasty: 
   npcFavorLevel: 0
   maxNpcFavorLevel: 5
   currentFavor: 0
@@ -484,6 +485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4a19ebe306d7434fb62184659f036a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcTransform: {fileID: 0}
 --- !u!1 &2578093348811660895
 GameObject:
   m_ObjectHideFlags: 0

@@ -550,11 +550,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8651984786879485148, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.8
+      value: 6.2
       objectReference: {fileID: 0}
     - target: {fileID: 8651984786879485148, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -5.36
+      value: -3.6
       objectReference: {fileID: 0}
     - target: {fileID: 8651984786879485148, guid: 63d029f4a165fb048a53ee0be31472c7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -611,12 +611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a94d5445654754a408013216665de4ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcData:
-    Name: "\u82CF\u8F7C"
-    Personality: "\u5FE7\u56FD\u5FE7\u6C11"
-    Interests: []
-    DialogueHistory: []
-    lastSentence: 
+  npcData: {fileID: 0}
 --- !u!1001 &428132801
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -854,12 +849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a94d5445654754a408013216665de4ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcData:
-    Name: "\u674E\u767D"
-    Personality: "\u6D6A\u6F2B"
-    Interests: []
-    DialogueHistory: []
-    lastSentence: 
+  npcData: {fileID: 0}
 --- !u!1001 &614458998
 PrefabInstance:
   m_ObjectHideFlags: 0

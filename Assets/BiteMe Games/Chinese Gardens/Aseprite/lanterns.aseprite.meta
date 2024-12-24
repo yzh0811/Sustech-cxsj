@@ -230,7 +230,7 @@ ScriptedImporter:
     layerType: 0
     blendMode: 0
     cells:
-    - name: Frame_0
+    - name: lanterns_Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -239,7 +239,7 @@ ScriptedImporter:
         width: 47
         height: 32
       spriteId: 0679a9b9463ff2d4f8cbf32295c08a3c
-    - name: Frame_1
+    - name: lanterns_Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
@@ -248,7 +248,7 @@ ScriptedImporter:
         width: 47
         height: 32
       spriteId: d5cd6124003a7624eae5ac9916891e24
-    - name: Frame_2
+    - name: lanterns_Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
@@ -257,7 +257,7 @@ ScriptedImporter:
         width: 47
         height: 32
       spriteId: 2df5607c188c6a74d9fe12b95a911005
-    - name: Frame_3
+    - name: lanterns_Frame_3
       frameIndex: 3
       additiveSortOrder: 0
       cellRect:
@@ -266,7 +266,7 @@ ScriptedImporter:
         width: 47
         height: 32
       spriteId: 9ec32eff154670e47924eb79f7eae8b3
-    - name: Frame_4
+    - name: lanterns_Frame_4
       frameIndex: 4
       additiveSortOrder: 0
       cellRect:

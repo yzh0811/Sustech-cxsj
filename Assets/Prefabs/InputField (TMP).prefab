@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter text...
+  m_text: Generating Graph...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d756baf4db1326349a817cc5caee370e, type: 2}
   m_sharedMaterial: {fileID: 8644847403373531624, guid: d756baf4db1326349a817cc5caee370e, type: 2}
